@@ -1,0 +1,77 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.4)
+
+2025-04-15T16:04:58.833Z  INFO 1 --- [cardmanager] [           main] c.e.cardmanager.CardmanagerApplication   : Starting CardmanagerApplication v0.0.1-SNAPSHOT using Java 17.0.14 with PID 1 (/app/app.jar started by root in /app)
+2025-04-15T16:04:58.839Z  INFO 1 --- [cardmanager] [           main] c.e.cardmanager.CardmanagerApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-04-15T16:05:00.150Z  INFO 1 --- [cardmanager] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-15T16:05:00.317Z  INFO 1 --- [cardmanager] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 148 ms. Found 3 JPA repository interfaces.
+2025-04-15T16:05:01.373Z  INFO 1 --- [cardmanager] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-04-15T16:05:01.404Z  INFO 1 --- [cardmanager] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-04-15T16:05:01.405Z  INFO 1 --- [cardmanager] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-04-15T16:05:01.465Z  INFO 1 --- [cardmanager] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-04-15T16:05:01.468Z  INFO 1 --- [cardmanager] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2531 ms
+2025-04-15T16:05:01.715Z  INFO 1 --- [cardmanager] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-04-15T16:05:02.047Z  INFO 1 --- [cardmanager] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@cc9ef8d
+2025-04-15T16:05:02.049Z  INFO 1 --- [cardmanager] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-04-15T16:05:02.271Z  INFO 1 --- [cardmanager] [           main] liquibase.database                       : Set default schema name to public
+2025-04-15T16:05:03.031Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Creating database history table with name: public.databasechangelog
+2025-04-15T16:05:03.106Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Reading from public.databasechangelog
+2025-04-15T16:05:03.302Z  INFO 1 --- [cardmanager] [           main] liquibase.lockservice                    : Successfully acquired change log lock
+2025-04-15T16:05:03.303Z  INFO 1 --- [cardmanager] [           main] liquibase.command                        : Using deploymentId: 4733103303
+2025-04-15T16:05:03.306Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Reading from public.databasechangelog
+2025-04-15T16:05:03.358Z  INFO 1 --- [cardmanager] [           main] liquibase.ui                             : Running Changeset: db/changelog/v1.0-initial-schema.xml::1::yourname
+2025-04-15T16:05:03.380Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Table users created
+2025-04-15T16:05:03.401Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Table cards created
+2025-04-15T16:05:03.410Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Table transactions created
+2025-04-15T16:05:03.415Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Foreign key constraint added to cards (user_id)
+2025-04-15T16:05:03.419Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Foreign key constraint added to transactions (source_card_id)
+2025-04-15T16:05:03.422Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Foreign key constraint added to transactions (target_card_id)
+2025-04-15T16:05:03.427Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Index idx_users_email created
+2025-04-15T16:05:03.432Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : Index idx_cards_user_id created
+2025-04-15T16:05:03.434Z  INFO 1 --- [cardmanager] [           main] liquibase.changelog                      : ChangeSet db/changelog/v1.0-initial-schema.xml::1::yourname ran successfully in 74ms
+2025-04-15T16:05:03.449Z  INFO 1 --- [cardmanager] [           main] liquibase.util                           : UPDATE SUMMARY
+2025-04-15T16:05:03.450Z  INFO 1 --- [cardmanager] [           main] liquibase.util                           : Run:                          1
+2025-04-15T16:05:03.450Z  INFO 1 --- [cardmanager] [           main] liquibase.util                           : Previously run:               0
+2025-04-15T16:05:03.450Z  INFO 1 --- [cardmanager] [           main] liquibase.util                           : Filtered out:                 0
+2025-04-15T16:05:03.450Z  INFO 1 --- [cardmanager] [           main] liquibase.util                           : -------------------------------
+2025-04-15T16:05:03.451Z  INFO 1 --- [cardmanager] [           main] liquibase.util                           : Total change sets:            1
+2025-04-15T16:05:03.452Z  INFO 1 --- [cardmanager] [           main] liquibase.util                           : Update summary generated
+2025-04-15T16:05:03.456Z  INFO 1 --- [cardmanager] [           main] liquibase.command                        : Update command completed successfully.
+2025-04-15T16:05:03.457Z  INFO 1 --- [cardmanager] [           main] liquibase.ui                             : Liquibase: Update has been successful. Rows affected: 1
+2025-04-15T16:05:03.461Z  INFO 1 --- [cardmanager] [           main] liquibase.lockservice                    : Successfully released change log lock
+2025-04-15T16:05:03.463Z  INFO 1 --- [cardmanager] [           main] liquibase.command                        : Command execution complete
+2025-04-15T16:05:03.572Z  INFO 1 --- [cardmanager] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-15T16:05:03.644Z  INFO 1 --- [cardmanager] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.11.Final
+2025-04-15T16:05:03.689Z  INFO 1 --- [cardmanager] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-04-15T16:05:04.107Z  INFO 1 --- [cardmanager] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-15T16:05:04.206Z  INFO 1 --- [cardmanager] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 14.17
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-04-15T16:05:05.607Z  INFO 1 --- [cardmanager] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-15T16:05:05.672Z  INFO 1 --- [cardmanager] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-15T16:05:06.562Z  WARN 1 --- [cardmanager] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-04-15T16:05:06.594Z  WARN 1 --- [cardmanager] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 93d69444-b3d8-4f4d-86fc-2d6bd01e6778
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-04-15T16:05:06.623Z  INFO 1 --- [cardmanager] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2025-04-15T16:05:07.347Z  INFO 1 --- [cardmanager] [           main] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2025-04-15T16:05:07.846Z  INFO 1 --- [cardmanager] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-04-15T16:05:07.871Z  INFO 1 --- [cardmanager] [           main] c.e.cardmanager.CardmanagerApplication   : Started CardmanagerApplication in 9.886 seconds (process running for 11.037)
+2025-04-15T16:06:29.188Z  INFO 1 --- [cardmanager] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-04-15T16:06:29.188Z  INFO 1 --- [cardmanager] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-04-15T16:06:29.190Z  INFO 1 --- [cardmanager] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms

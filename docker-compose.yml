@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: card_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:  # Добавляем проверку здоровья
+      test: ["CMD-SHELL", "pg_isready -U user -d card_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/card_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: pass
+    depends_on:
+      postgres:
+        condition: service_healthy  # Зависимость от успешного healthcheck
+
+volumes:
+  pgdata:
