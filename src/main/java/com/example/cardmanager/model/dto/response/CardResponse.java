@@ -3,29 +3,33 @@ package com.example.cardmanager.model.dto.response;
 
 import com.example.cardmanager.model.entity.Card;
 import com.example.cardmanager.model.entity.enums.CardStatus;
+import com.example.cardmanager.service.CardCryptoService;
 import com.example.cardmanager.util.CardNumberMasker;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record CardResponse(
-        String maskedNumber,  // Используем маскированный номер
+        Long id,
+        String maskedNumber,
         String holderName,
         LocalDate expirationDate,
-        BigDecimal balance,
-        CardStatus status
+        CardStatus status,
+        BigDecimal balance
 ) {
-    public static CardResponse fromEntity(Card card) {
+    public static CardResponse fromEntity(Card card, CardCryptoService cryptoService) {
         return new CardResponse(
-                maskCardNumber(card.getCardNumber()),
+                card.getId(),
+                cryptoService.maskCardNumber(card.getCardNumber()),
                 card.getHolderName(),
                 card.getExpirationDate(),
-                card.getBalance(),
-                card.getStatus()
+                card.getStatus(),
+                card.getBalance()
         );
     }
-    private static String maskCardNumber(String cardNumber) {
-        if (cardNumber == null || cardNumber.length() < 16) return "****";
-        return "****-****-****-" + cardNumber.substring(12);
+
+    private static String maskCardNumber(String encryptedNumber, CardCryptoService cryptoService) {
+        String decrypted = cryptoService.decrypt(encryptedNumber);
+        return "**** **** **** " + decrypted.substring(decrypted.length() - 4);
     }
 }

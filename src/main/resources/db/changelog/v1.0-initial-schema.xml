@@ -60,7 +60,7 @@
             <column name="type" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="timestamp" type="TIMESTAMP">
+            <column name="timestamp" type="TIMESTAMP" >
                 <constraints nullable="false"/>
             </column>
             <column name="source_card_id" type="BIGINT"/>
@@ -98,8 +98,5 @@
         <createIndex tableName="cards" indexName="idx_cards_user_id">
             <column name="user_id"/>
         </createIndex>
-    </changeSet>
-    <changeSet id="2" author="yourname">
-        <dropColumn tableName="users" columnName="name"/>
     </changeSet>
 </databaseChangeLog>

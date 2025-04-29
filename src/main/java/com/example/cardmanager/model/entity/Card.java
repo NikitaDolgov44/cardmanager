@@ -21,8 +21,7 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Convert(converter = CryptoConverter.class)
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(512)")
     private String cardNumber;
 
     @Column(nullable = false)

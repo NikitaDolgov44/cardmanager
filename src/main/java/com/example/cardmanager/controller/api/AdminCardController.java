@@ -1,9 +1,12 @@
-package com.example.cardmanager.controller.api.admin;
+package com.example.cardmanager.controller.api;
 
 import com.example.cardmanager.model.dto.request.CreateCardRequest;
 import com.example.cardmanager.model.dto.response.CardResponse;
 import com.example.cardmanager.model.entity.Card;
+import com.example.cardmanager.model.entity.User;
+import com.example.cardmanager.service.CardCryptoService;
 import com.example.cardmanager.service.CardService;
+import com.example.cardmanager.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminCardController {
     private final CardService cardService;
+    private final UserService userService;
+    private final CardCryptoService cardCryptoService;
 
     @PostMapping
     public ResponseEntity<CardResponse> createCard(@RequestBody CreateCardRequest request) {
-        Card card = cardService.createCard(request);
-        return ResponseEntity.ok(CardResponse.fromEntity(card));
+        User user = userService.getUserByEmail(request.userEmail());
+        Card card = cardService.createCard(request, user);
+        return ResponseEntity.ok(CardResponse.fromEntity(card, cardCryptoService));
     }
 
     @GetMapping
@@ -29,10 +35,6 @@ public class AdminCardController {
             @RequestParam(defaultValue = "10") int size
     ) {
         return cardService.getAllCards(page, size)
-                .map(this::mapToResponse);
-    }
-
-    private CardResponse mapToResponse(Card card) {
-        return CardResponse.fromEntity(card);
+                .map(card -> CardResponse.fromEntity(card, cardCryptoService));
     }
 }
