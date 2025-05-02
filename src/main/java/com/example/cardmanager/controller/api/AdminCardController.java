@@ -1,6 +1,7 @@
 package com.example.cardmanager.controller.api;
 
 import com.example.cardmanager.model.dto.request.CreateCardRequest;
+import com.example.cardmanager.model.dto.request.UpdateCardRequest;
 import com.example.cardmanager.model.dto.response.CardResponse;
 import com.example.cardmanager.model.entity.Card;
 import com.example.cardmanager.model.entity.User;
@@ -36,5 +37,20 @@ public class AdminCardController {
     ) {
         return cardService.getAllCards(page, size)
                 .map(card -> CardResponse.fromEntity(card, cardCryptoService));
+    }
+
+    @PatchMapping("/{cardId}/status")
+    public ResponseEntity<CardResponse> updateCardStatus(
+            @PathVariable Long cardId,
+            @RequestBody UpdateCardRequest request
+    ) {
+        Card card = cardService.updateCardStatus(cardId, request.status());
+        return ResponseEntity.ok(CardResponse.fromEntity(card, cardCryptoService));
+    }
+
+    @DeleteMapping("/{cardId}")
+    public ResponseEntity<Void> deleteCard(@PathVariable Long cardId) {
+        cardService.deleteCard(cardId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -7,7 +7,12 @@ import java.math.BigDecimal;
 
 @Builder
 public record TransferRequest(
+
         @NotNull Long sourceCardId,
+
         @NotNull Long targetCardId,
-        @Positive @Digits(integer = 10, fraction = 2) BigDecimal amount
+
+        @Positive
+        @Digits(integer = 10, fraction = 2)
+        BigDecimal amount
 ) {}

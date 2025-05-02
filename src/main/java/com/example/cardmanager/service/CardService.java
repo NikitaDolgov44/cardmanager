@@ -8,13 +8,15 @@ import com.example.cardmanager.model.entity.enums.CardStatus;
 import com.example.cardmanager.model.entity.User;
 import com.example.cardmanager.repository.CardRepository;
 import com.example.cardmanager.repository.UserRepository;
-import com.example.cardmanager.util.CryptoConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +24,7 @@ public class CardService {
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
     private final CardNumberGenerator cardNumberGenerator;
-    private final CryptoConverter cryptoConverter;
-    private final CardCryptoService cardCryptoService; // Сервис для шифрования
+    private final CardCryptoService cardCryptoService;
 
     @Transactional
     public Card createCard(CreateCardRequest request, User user) {
@@ -48,8 +49,42 @@ public class CardService {
     public Page<Card> getUserCards(Pageable pageable, String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-
         return cardRepository.findByUserId(user.getId(), pageable);
+    }
+
+    @Transactional
+    public Card updateCardStatus(Long cardId, CardStatus newStatus) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException("Card not found"));
+
+        if (card.getStatus() == CardStatus.EXPIRED) {
+            throw new IllegalStateException("Cannot change status of expired card");
+        }
+
+        card.setStatus(newStatus);
+        return cardRepository.save(card);
+    }
+
+    public void deleteCard(Long cardId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException("Card not found"));
+
+        if (card.getStatus() == CardStatus.ACTIVE) {
+            throw new IllegalStateException("Cannot delete active card");
+        }
+
+        cardRepository.delete(card);
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void checkAndMarkExpiredCards() {
+        LocalDate today = LocalDate.now();
+        cardRepository.findAllByExpirationDateBeforeAndStatusNot(
+                today, CardStatus.EXPIRED
+        ).forEach(card -> {
+            card.setStatus(CardStatus.EXPIRED);
+            cardRepository.save(card);
+        });
     }
 
     @Transactional
@@ -67,4 +102,5 @@ public class CardService {
         card.setStatus(CardStatus.BLOCKED);
         cardRepository.save(card);
     }
+
 }

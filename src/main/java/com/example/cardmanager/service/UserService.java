@@ -6,6 +6,8 @@ import com.example.cardmanager.model.entity.enums.RoleType;
 import com.example.cardmanager.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +50,7 @@ public class UserService {
         user.setRole(newRole);
         return userRepository.save(user);
     }
-
-    // Дополнительные методы при необходимости
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
 }

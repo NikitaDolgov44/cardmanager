@@ -1,116 +1,102 @@
 package com.example.cardmanager.service;
 
-import com.example.cardmanager.CardmanagerApplication;
 import com.example.cardmanager.exception.UserAlreadyExistsException;
 import com.example.cardmanager.model.entity.User;
 import com.example.cardmanager.model.entity.enums.RoleType;
-import com.example.cardmanager.repository.CardRepository;
 import com.example.cardmanager.repository.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-
-@ActiveProfiles("test")
-@SpringBootTest(
-        classes = CardmanagerApplication.class,
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
-@Testcontainers
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:14-alpine")
-            .withDatabaseName("testdb")
-            .withUsername("testuser")
-            .withPassword("testpass");
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-        registry.add("spring.liquibase.enabled", () -> "false");
-        registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
-    }
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
+    @Mock
     private UserRepository userRepository;
 
-    @Autowired
+    @Mock
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private CardRepository cardRepository;
+    @InjectMocks
+    private UserService userService;
 
-    @AfterEach
-    void tearDown() {
-        userRepository.deleteAll();
-        cardRepository.deleteAll();
+    @Test
+    void registerUser_shouldCreateNewUser() {
+        // Arrange
+        String email = "test@example.com";
+        String password = "password123";
+        when(userRepository.existsByEmail(email)).thenReturn(false);
+        when(passwordEncoder.encode(password)).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        User result = userService.registerUser(email, password, RoleType.ROLE_USER);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(email, result.getEmail());
+        assertEquals("encodedPassword", result.getPassword());
+        assertEquals(RoleType.ROLE_USER, result.getRole());
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
-    void shouldRegisterNewUser() {
-        // Регистрация нового пользователя
-        User newUser = userService.registerUser(
-                "user@test.com",
-                "password123",
-                RoleType.ROLE_USER
+    void registerUser_shouldThrowWhenEmailExists() {
+        // Arrange
+        String email = "exists@example.com";
+        when(userRepository.existsByEmail(email)).thenReturn(true);
+
+        // Act & Assert
+        assertThrows(UserAlreadyExistsException.class, () ->
+                userService.registerUser(email, "password", RoleType.ROLE_USER)
         );
-
-        // Проверки
-        assertNotNull(newUser.getId());
-        assertEquals("user@test.com", newUser.getEmail());
-        assertTrue(passwordEncoder.matches("password123", newUser.getPassword()));
-        assertEquals(RoleType.ROLE_USER, newUser.getRole());
+        verify(userRepository, never()).save(any());
     }
 
     @Test
-    void shouldFailWhenRegisterDuplicateEmail() {
-        // Первая регистрация
-        userService.registerUser("duplicate@test.com", "password", RoleType.ROLE_USER);
+    void getUserByEmail_shouldReturnUser() {
+        // Arrange
+        String email = "user@example.com";
+        User expectedUser = User.builder()
+                .email(email)
+                .password("encodedPass")
+                .role(RoleType.ROLE_USER)
+                .build();
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(expectedUser));
 
-        // Попытка повторной регистрации
-        assertThrows(UserAlreadyExistsException.class, () -> {
-            userService.registerUser("duplicate@test.com", "password", RoleType.ROLE_USER);
-        });
+        // Act
+        User result = userService.getUserByEmail(email);
+
+        // Assert
+        assertEquals(expectedUser, result);
     }
 
     @Test
-    void shouldFindUserByEmail() {
-        // Подготовка данных
-        userService.registerUser("find@test.com", "password", RoleType.ROLE_ADMIN);
+    void updateUserRole_shouldChangeRole() {
+        // Arrange
+        Long userId = 1L;
+        User user = User.builder()
+                .id(userId)
+                .email("user@example.com")
+                .role(RoleType.ROLE_USER)
+                .build();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Поиск пользователя
-        User foundUser = userService.getUserByEmail("find@test.com");
+        // Act
+        User result = userService.updateUserRole(userId, RoleType.ROLE_ADMIN);
 
-        // Проверки
-        assertEquals("find@test.com", foundUser.getEmail());
-        assertEquals(RoleType.ROLE_ADMIN, foundUser.getRole());
-    }
-
-    @Test
-    void shouldUpdateUserRole() {
-        // Создание пользователя
-        User user = userService.registerUser("update@test.com", "password", RoleType.ROLE_USER);
-
-        // Обновление роли
-        User updatedUser = userService.updateUserRole(user.getId(), RoleType.ROLE_ADMIN);
-
-        // Проверки
-        assertEquals(RoleType.ROLE_ADMIN, updatedUser.getRole());
+        // Assert
+        assertEquals(RoleType.ROLE_ADMIN, result.getRole());
+        verify(userRepository).save(user);
     }
 }

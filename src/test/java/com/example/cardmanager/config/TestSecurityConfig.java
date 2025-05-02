@@ -10,21 +10,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @TestConfiguration
-@Profile("test")
 public class TestSecurityConfig {
+
     @Bean
-    @Primary
     public UserDetailsService testUserDetailsService() {
-        UserDetails admin = User.withUsername("admin@test.com")
-                .password("{noop}password")
-                .authorities("ROLE_ADMIN")
+        UserDetails user = User.builder()
+                .username("user@test.com")
+                .password("{noop}password") // {noop} означает plain text пароль
+                .roles("USER")
                 .build();
 
-        UserDetails user = User.withUsername("user@test.com")
+        UserDetails admin = User.builder()
+                .username("admin@test.com")
                 .password("{noop}password")
-                .authorities("ROLE_USER")
+                .roles("ADMIN")
                 .build();
 
-        return new InMemoryUserDetailsManager(admin, user);
+        return new InMemoryUserDetailsManager(user, admin);
     }
 }
