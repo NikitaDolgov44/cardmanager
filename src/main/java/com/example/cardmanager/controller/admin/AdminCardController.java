@@ -1,5 +1,6 @@
 package com.example.cardmanager.controller.api;
 
+import com.example.cardmanager.exception.CardNotFoundException;
 import com.example.cardmanager.model.dto.request.CreateCardRequest;
 import com.example.cardmanager.model.dto.request.UpdateCardRequest;
 import com.example.cardmanager.model.dto.response.CardResponse;
@@ -10,6 +11,7 @@ import com.example.cardmanager.service.CardService;
 import com.example.cardmanager.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -52,5 +54,9 @@ public class AdminCardController {
     public ResponseEntity<Void> deleteCard(@PathVariable Long cardId) {
         cardService.deleteCard(cardId);
         return ResponseEntity.noContent().build();
+    }
+    @ExceptionHandler(CardNotFoundException.class)
+    public ResponseEntity<String> handleCardNotFound(CardNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

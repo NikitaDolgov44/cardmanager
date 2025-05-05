@@ -1,4 +1,4 @@
-package com.example.cardmanager.model.dto.response;
+package com.example.cardmanager.model.dto.auth;
 
 public class AuthResponse {
     private String accessToken;
