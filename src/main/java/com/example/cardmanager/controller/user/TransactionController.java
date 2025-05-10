@@ -1,4 +1,4 @@
-package com.example.cardmanager.controller.api;
+package com.example.cardmanager.controller.user;
 
 import com.example.cardmanager.model.dto.request.TransferRequest;
 import com.example.cardmanager.model.dto.request.WithdrawalRequest;
@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 @Component
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('USER')")
 public class TransactionController {
 
     private final TransactionService transactionService;

@@ -1,5 +1,5 @@
-# Используем официальный образ Java 21
-FROM eclipse-temurin:21-jdk
+# Используем официальный образ Java 17
+FROM eclipse-temurin:17-jdk
 
 # Рабочая директория внутри контейнера
 WORKDIR /app

@@ -47,16 +47,16 @@ class CardServiceIntegrationTest {
     }
 
     @Test
-    void createCard_shouldWork() {
-        // Создаем пользователя через builder с обязательными полями
+    void createCardShouldWork() {
+        // Arrange
         User user = userRepository.save(
                 User.builder()
                         .email("test@test.com")
-                        .password("encodedPass") // обязательное поле
-                        .role(RoleType.ROLE_USER) // обязательное поле
+                        .password("encodedPass")
+                        .role(RoleType.USER)
                         .build()
         );
-
+        // Act
         Card card = cardService.createCard(
                 new CreateCardRequest(
                         user.getEmail(),
@@ -66,7 +66,7 @@ class CardServiceIntegrationTest {
                 ),
                 user
         );
-
+        // Assert
         assertNotNull(card.getId());
         assertEquals("TEST USER", card.getHolderName());
     }

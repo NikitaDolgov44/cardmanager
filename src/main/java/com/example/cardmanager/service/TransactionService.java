@@ -26,7 +26,7 @@ public class TransactionService {
     private final CardRepository cardRepository;
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
-    private final LimitService limitService; // Если реализовано
+    private final LimitService limitService;
 
     @Transactional
     public Page<Transaction> getCardTransactions(Long cardId, String userEmail, Pageable pageable) {

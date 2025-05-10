@@ -1,4 +1,4 @@
-package com.example.cardmanager.controller.api;
+package com.example.cardmanager.controller.user;
 
 import com.example.cardmanager.model.dto.response.CardResponse;
 import com.example.cardmanager.model.dto.response.TransactionResponse;
@@ -49,7 +49,7 @@ public class UserCardController {
         ).map(card -> CardResponse.fromEntity(card, cardCryptoService));
     }
 
-    @PatchMapping("/{cardId}/block")
+    @PutMapping("/{cardId}/block")
     public ResponseEntity<Void> requestBlockCard(
             @PathVariable Long cardId,
             Principal principal

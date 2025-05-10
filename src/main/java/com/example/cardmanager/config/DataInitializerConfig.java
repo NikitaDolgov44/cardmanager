@@ -22,7 +22,14 @@ public class DataInitializerConfig {
                 userRepository.save(User.builder()
                         .email("admin@example.com")
                         .password(encoder.encode("admin123"))
-                        .role(RoleType.ROLE_ADMIN)
+                        .role(RoleType.ADMIN)
+                        .build());
+            }
+            if (userRepository.findByEmail("user@example.com").isEmpty()) {
+                userRepository.save(User.builder()
+                        .email("user@example.com")
+                        .password(encoder.encode("user123"))
+                        .role(RoleType.USER)
                         .build());
             }
         };

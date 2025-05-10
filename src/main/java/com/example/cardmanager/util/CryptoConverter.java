@@ -24,7 +24,8 @@ public class CryptoConverter {
         byte[] ivBytes = ivString.getBytes(StandardCharsets.UTF_8);
 
         if (keyBytes.length != 32 || ivBytes.length != 16) {
-            throw new IllegalArgumentException("Некорректные ключи шифрования");
+            throw new IllegalArgumentException("Некорректные ключи шифрования. Key bytes: "
+                    + keyBytes.length + ", IV bytes: " + ivBytes.length);
         }
 
         this.key = new SecretKeySpec(keyBytes, "AES");

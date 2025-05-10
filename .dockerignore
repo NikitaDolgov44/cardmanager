@@ -1,0 +1,11 @@
+# Игнорируем
+target/
+.git/
+.idea/
+*.iml
+*.log
+docker-compose*.yml
+Dockerfile*
+.gitignore
+HELP.md
+README.md

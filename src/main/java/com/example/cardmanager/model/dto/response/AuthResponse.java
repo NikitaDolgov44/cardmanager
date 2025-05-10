@@ -1,10 +1,9 @@
-package com.example.cardmanager.model.dto.auth;
+package com.example.cardmanager.model.dto.response;
 
-public class AuthResponse {
-    private String accessToken;
+import com.example.cardmanager.model.entity.enums.RoleType;
 
-    public AuthResponse(String accessToken) {
-        this.accessToken = accessToken;
-    }
-    // геттер
-}
+public record AuthResponse(
+        String token,
+        String email,
+        RoleType role
+) {}

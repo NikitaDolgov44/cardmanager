@@ -39,13 +39,13 @@ class UserServiceTest {
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
-        User result = userService.registerUser(email, password, RoleType.ROLE_USER);
+        User result = userService.registerUser(email, password, RoleType.USER);
 
         // Assert
         assertNotNull(result);
         assertEquals(email, result.getEmail());
         assertEquals("encodedPassword", result.getPassword());
-        assertEquals(RoleType.ROLE_USER, result.getRole());
+        assertEquals(RoleType.USER, result.getRole());
         verify(userRepository).save(any(User.class));
     }
 
@@ -57,7 +57,7 @@ class UserServiceTest {
 
         // Act & Assert
         assertThrows(UserAlreadyExistsException.class, () ->
-                userService.registerUser(email, "password", RoleType.ROLE_USER)
+                userService.registerUser(email, "password", RoleType.USER)
         );
         verify(userRepository, never()).save(any());
     }
@@ -69,7 +69,7 @@ class UserServiceTest {
         User expectedUser = User.builder()
                 .email(email)
                 .password("encodedPass")
-                .role(RoleType.ROLE_USER)
+                .role(RoleType.USER)
                 .build();
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(expectedUser));
 
@@ -87,16 +87,16 @@ class UserServiceTest {
         User user = User.builder()
                 .id(userId)
                 .email("user@example.com")
-                .role(RoleType.ROLE_USER)
+                .role(RoleType.USER)
                 .build();
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
-        User result = userService.updateUserRole(userId, RoleType.ROLE_ADMIN);
+        User result = userService.updateUserRole(userId, RoleType.ADMIN);
 
         // Assert
-        assertEquals(RoleType.ROLE_ADMIN, result.getRole());
+        assertEquals(RoleType.ADMIN, result.getRole());
         verify(userRepository).save(user);
     }
 }

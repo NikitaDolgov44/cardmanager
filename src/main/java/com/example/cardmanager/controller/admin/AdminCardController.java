@@ -1,4 +1,4 @@
-package com.example.cardmanager.controller.api;
+package com.example.cardmanager.controller.admin;
 
 import com.example.cardmanager.exception.CardNotFoundException;
 import com.example.cardmanager.model.dto.request.CreateCardRequest;
@@ -6,6 +6,7 @@ import com.example.cardmanager.model.dto.request.UpdateCardRequest;
 import com.example.cardmanager.model.dto.response.CardResponse;
 import com.example.cardmanager.model.entity.Card;
 import com.example.cardmanager.model.entity.User;
+import com.example.cardmanager.model.entity.enums.CardStatus;
 import com.example.cardmanager.service.CardCryptoService;
 import com.example.cardmanager.service.CardService;
 import com.example.cardmanager.service.UserService;
@@ -47,6 +48,18 @@ public class AdminCardController {
             @RequestBody UpdateCardRequest request
     ) {
         Card card = cardService.updateCardStatus(cardId, request.status());
+        return ResponseEntity.ok(CardResponse.fromEntity(card, cardCryptoService));
+    }
+
+    @PutMapping("/{cardId}/block")
+    public ResponseEntity<CardResponse> blockCard(@PathVariable Long cardId) {
+        Card card = cardService.updateCardStatus(cardId, CardStatus.BLOCKED);
+        return ResponseEntity.ok(CardResponse.fromEntity(card, cardCryptoService));
+    }
+
+    @PutMapping("/{cardId}/activate")
+    public ResponseEntity<CardResponse> activateCard(@PathVariable Long cardId) {
+        Card card = cardService.updateCardStatus(cardId, CardStatus.ACTIVE);
         return ResponseEntity.ok(CardResponse.fromEntity(card, cardCryptoService));
     }
 

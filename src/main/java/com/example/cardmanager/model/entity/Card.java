@@ -1,7 +1,6 @@
 package com.example.cardmanager.model.entity;
 
 import com.example.cardmanager.model.entity.enums.CardStatus;
-import com.example.cardmanager.util.CryptoConverter;
 import lombok.*;
 
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.example.cardmanager.service;
+package com.example.cardmanager.util;
 
 import org.springframework.stereotype.Component;
 import java.util.Random;

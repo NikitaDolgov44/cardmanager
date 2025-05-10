@@ -8,6 +8,7 @@ import com.example.cardmanager.model.entity.enums.CardStatus;
 import com.example.cardmanager.model.entity.User;
 import com.example.cardmanager.repository.CardRepository;
 import com.example.cardmanager.repository.UserRepository;
+import com.example.cardmanager.util.CardNumberGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -102,5 +103,4 @@ public class CardService {
         card.setStatus(CardStatus.BLOCKED);
         cardRepository.save(card);
     }
-
 }

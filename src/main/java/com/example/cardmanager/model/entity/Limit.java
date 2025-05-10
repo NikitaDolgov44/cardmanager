@@ -19,14 +19,14 @@ public class Limit {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "limit_type", nullable = false)
     private LimitType limitType;
 
     @Column(nullable = false)
     private BigDecimal amount;
 
-    @Column(nullable = false)
-    private LocalDate resetDate; // Дата следующего сброса лимита
+    @Column(name = "reset_date", nullable = false)
+    private LocalDate resetDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id", nullable = false)

@@ -1,4 +1,9 @@
 package com.example.cardmanager.model.dto.auth;
 
-public class LoginResponse {
-}
+import com.example.cardmanager.model.entity.enums.RoleType;
+
+public record LoginResponse(
+        String token,
+        String email,
+        RoleType role
+) {}
