@@ -18,6 +18,6 @@ docker-compose up
 http://localhost:8080/swagger-ui.html
 
 ### Тестовые пользователи
-Роль	        Логин	              Пароль
+Роль	        Логин	                 Пароль
 Админ	        admin@example.com	  admin123
 Пользователь	user@example.com	  user123
